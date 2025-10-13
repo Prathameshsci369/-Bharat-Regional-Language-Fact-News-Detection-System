@@ -224,7 +224,7 @@ def run_analysis(query: str):
 
 def main():
     """Defines the Streamlit application layout and flow."""
-    st.set_page_config(layout="wide", page_title="FND-AI: Fake News Detection")
+    st.set_page_config(layout="wide", page_title="Bharat: Regional Language Fact Verification")
 
     st.markdown(
         """
@@ -243,16 +243,40 @@ def main():
             color: white;
             box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
         }
+        footer {visibility: hidden;}
         </style>
         """,
         unsafe_allow_html=True
     )
     
-    st.title("FND-AI: Fake News Detection and Analysis")
-    st.subheader("Leveraging Gemini for Query Generation and Local LLM (Phi-4) for Claim Analysis")
+    # Main title and short description
+    st.title("🇮🇳 Bharat: Regional Language Fact News Detection System")
+    st.subheader("Multilingual, evidence-driven AI for real-time fact verification across 22 Indian languages")
+
+    # --- Project Overview (expanded by default) ---
+    with st.expander("🧠 About This Project", expanded=True):
+        st.markdown(
+            """
+            **Bharat** is an agentic AI system that continuously monitors social media and news sources to detect
+            emerging misinformation and verify factual claims in **22 Indian languages**.
+
+            Key capabilities:
+            - Extracts and decomposes claims from platforms like **Reddit**, **YouTube**, and regional news portals.
+            - Verifies atomic claims using trusted sources (PIB, ECI, Wikipedia) via entailment-based checks.
+            - Produces structured outputs (ClaimReview JSON) with confidence scores, citations, and clear explanations.
+            - Escalates low-confidence or politically sensitive items for **human review**.
+            """
+        )
 
     # --- Sidebar/Configuration ---
     with st.sidebar:
+        # Short tagline for immediate context
+        st.markdown("""
+        ### 🧭 Bharat AI — Real-Time Regional Fact Verification
+        Continuously monitors and verifies factual accuracy across India's diverse language ecosystem.
+        """)
+        st.markdown("---")
+
         st.header("App Mode")
         mode = st.radio("Select Analysis Mode:", ["Live Analysis (Full Pipeline)", "Test Mode (Mock Data)"])
         
@@ -271,12 +295,11 @@ def main():
             st.warning("Running in **Test Mode** using mock data for demonstration.")
         
         st.markdown("---")
-        st.info("The Live Analysis mode requires `reddit.py` and `final.py` to be correctly configured with PRAW credentials and a local Phi-4 LLM.")
-
+        st.info("Live Analysis requires `reddit.py` and `final.py` with PRAW credentials and a local Phi-4 LLM.")
 
     # --- Input Section ---
     query = st.text_input(
-        "Enter a claim or topic to fact-check on Reddit:", 
+        "Enter a claim or topic to fact-check (try: 'Harshad Mehta Scam 1992'):", 
         value=st.session_state.query if st.session_state.query else MOCK_QUERY_DEFAULT,
         key="input_query"
     )
@@ -336,6 +359,14 @@ def main():
     
     elif st.session_state.get('analysis_complete', False) and not results_to_display:
         st.info(f"Analysis completed for '{query_display}', but no claims were extracted by the LLM or no data was scraped.")
+
+    # --- Footer (non-intrusive) ---
+    st.markdown("---")
+    st.markdown(
+        "<div style='text-align:center; color:#888; font-size:12px;'>Built for the Agentic AI - Misinformation Track • Developed by Team Bharat</div>",
+        unsafe_allow_html=True
+    )
+
 
 
 if __name__ == '__main__':
