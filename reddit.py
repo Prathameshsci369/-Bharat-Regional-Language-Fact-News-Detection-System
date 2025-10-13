@@ -95,10 +95,10 @@ class RedditScraper:
     def __init__(self):  # Removed credentials_file argument
         try:
             # Hardcoded credentials as per user request
-            client_id = "7saghBLw8i27ObVlsJ3aXA"
-            client_secret = "mabnVjeixkJ-G0FIsOFf-vG19OlCyQ"
-            username = "Training_Student1147" # Ensure this is exactly your Reddit username
-            password = "SpaceScience369" # Ensure this is exactly your Reddit password
+            client_id = "ENTER YOUR CLIEND ID"
+            client_secret = "ENTER YOUR CLIENT SECRET"
+            username = "ENTER YOUR USERNAME" # Ensure this is exactly your Reddit username
+            password = "ENTER YOUR POASSWORD" # Ensure this is exactly your Reddit password
             
             user_agent = f"python:project1:v1.3.0 (by /u/{username})" # Updated user_agent version
             logger.info(f"Attempting to initialize PRAW with username: {username}, client_id: {client_id}, and user_agent: {user_agent}")
