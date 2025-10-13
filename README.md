@@ -1,4 +1,4 @@
-# 🧠 FND-AI: Fake News Detection and Analysis Platform
+# 🇮🇳 Bharat: Regional Language Fact News Detection System
 
 ![Streamlit](https://img.shields.io/badge/Built%20With-Streamlit-FF4B4B?logo=streamlit)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?logo=python)
@@ -9,15 +9,16 @@
 
 ## 📘 Overview
 
-**FND-AI** (Fake News Detection and Analysis Platform) is a proof-of-concept web application built with **Streamlit** that orchestrates a complete pipeline to **detect and classify potential fake news claims** found in social media discussions — specifically **Reddit**.
+**Bharat** is a multilingual, agentic AI system built with **Streamlit**, designed to detect and verify misinformation across **22 Indian languages**.
+It continuously monitors platforms like **Reddit, YouTube, and regional news portals**, detects claims, verifies them against trusted sources, and presents transparent, evidence-backed results.
 
-It uses a **local Large Language Model (LLM)** (e.g., *Phi-4 via llama-cpp-python*) to automatically **extract, verify, and classify claims** as **True**, **False**, **Misleading**, or **Unverifiable**.
+The platform integrates **Local Large Language Models (LLMs)** (e.g., *Phi-4 via llama-cpp-python*) and **Gemini-based query generation**, offering both accuracy and explainability.
 
 ---
 
 ## ⚙️ How It Works (Pipeline Overview)
 
-The analysis pipeline executes in **four main stages**:
+The analysis pipeline executes in **five main stages**:
 
 ### 1️⃣ User Query Input
 
@@ -31,27 +32,26 @@ The analysis pipeline executes in **four main stages**:
 
 ### 3️⃣ Data Preparation (LangChain)
 
-* The scraped text is loaded and split into smaller **text chunks** using `RecursiveCharacterTextSplitter`.
-* These chunks are then grouped into **manageable batches** for efficient processing.
+* The scraped text is split into smaller, meaningful **chunks** using `RecursiveCharacterTextSplitter`.
+* These chunks are grouped into **batches** for efficient parallel analysis.
 
-### 4️⃣ Claim Analysis (Local LLM - Phi-4)
+### 4️⃣ Claim Verification (Local LLM - Phi-4)
 
 * Each batch is analyzed by the **local LLM (Phi-4)** via `llama-cpp-python`.
-* The model performs **zero-shot classification**, identifying and labeling each claim as:
+* The model performs reasoning and zero-shot classification, identifying and labeling each claim as:
 
   * ✅ True
   * ❌ False
   * ⚠️ Misleading
   * ❓ Unverifiable
 
-### 5️⃣ Reporting (Streamlit)
+### 5️⃣ Multilingual Explanation & Visualization (Streamlit)
 
-* The results are displayed through the **Streamlit UI (`final5.py`)**.
-* Features include:
+* The results are displayed in the **Streamlit app (`final5.py`)** with:
 
-  * Interactive **visual charts** (Altair)
+  * Interactive **visual charts** using Altair
   * **Color-coded claim cards**
-  * **Summary metrics** for each claim category
+  * **Confidence scores, sources, and explanations** in readable format
 
 ---
 
@@ -79,31 +79,27 @@ pip install -r requirements.txt
 
 ### **3. Configure Reddit API Credentials**
 
-Before running live analysis, you must authenticate the Reddit scraper.
+Before running live analysis, authenticate the Reddit scraper.
 
 #### 🔹 Step 1: Create a Reddit App
 
 1. Go to [Reddit App Preferences](https://www.reddit.com/prefs/apps).
-2. Click **"Create App"** or **"Create Another App"**.
-3. Select **"script"** as the app type.
-4. Set:
+2. Click **"Create App"** → select **"script"** type.
+3. Fill in:
 
-   * **Name:** `FND-AI`
+   * **Name:** `Bharat-AI`
    * **Redirect URI:** `http://localhost:8080`
-5. Save the app — you’ll now see your **Client ID** and **Client Secret**.
+4. Save to obtain your **Client ID** and **Client Secret**.
 
 #### 🔹 Step 2: Apply Credentials in `reddit.py`
-
-Open your `reddit.py` file and update your environment variable section as follows:
 
 ```python
 import os
 import praw
 
-# Load Reddit API credentials from environment variables
 REDDIT_CLIENT_ID = os.getenv("REDDIT_CLIENT_ID", "your_client_id")
 REDDIT_CLIENT_SECRET = os.getenv("REDDIT_CLIENT_SECRET", "your_client_secret")
-REDDIT_USER_AGENT = os.getenv("REDDIT_USER_AGENT", "FND-AI-App by /u/your_username")
+REDDIT_USER_AGENT = os.getenv("REDDIT_USER_AGENT", "Bharat-FactCheck-App by /u/your_username")
 
 reddit = praw.Reddit(
     client_id=REDDIT_CLIENT_ID,
@@ -112,88 +108,85 @@ reddit = praw.Reddit(
 )
 ```
 
-> 💡 **Tip:** To keep credentials secure, define them in your system environment before running the app:
+> 💡 **Tip:** Export credentials securely from terminal:
 >
 > ```bash
 > export REDDIT_CLIENT_ID="your_client_id"
 > export REDDIT_CLIENT_SECRET="your_client_secret"
-> export REDDIT_USER_AGENT="FND-AI-App by /u/your_username"
+> export REDDIT_USER_AGENT="Bharat-FactCheck-App by /u/your_username"
 > ```
 
 ---
 
 ### **4. Run the Application**
 
-Once dependencies and credentials are set up, you can start the platform.
-
-#### 🔹 Step 1: Run Streamlit
-
-In your terminal, navigate to the project directory and run:
+Once dependencies and credentials are ready, launch the app:
 
 ```bash
 streamlit run final5.py
 ```
 
-#### 🔹 Step 2: Open in Browser
-
-After launching, Streamlit will automatically open your default browser with a URL like:
+Then open the app in your browser:
 
 ```
 http://localhost:8501
 ```
 
-You’ll see the **FND-AI Dashboard**, where you can:
+You’ll see the **Bharat Dashboard**, where you can:
 
 * Enter any **claim or topic** (e.g., “Harshad Mehta Scam 1992”)
 * Choose between:
 
-  * **Live Analysis (Full Pipeline)** — Runs the full Reddit + LLM pipeline
-  * **Test Mode (Mock Data)** — Loads built-in demo results
-* View visual analytics, claim classifications, and detailed explanations.
+  * **Live Analysis (Full Pipeline)** — Runs full Reddit + LLM workflow
+  * **Test Mode (Mock Data)** — Runs demo with built-in examples
+* Explore visual summaries, classification metrics, and detailed explanations.
+
+---
+
+## 🧠 In-App Information Sections
+
+The updated UI includes:
+
+* **Title:** `🇮🇳 Bharat: Regional Language Fact News Detection System`
+* **Subheader:** Highlights multilingual, evidence-based approach.
+* **Expander Section:** Describes the purpose and methodology.
+* **Sidebar Tagline:** Short project summary for context.
+* **Footer:** `Built for the Agentic AI - Misinformation Track | Team Bharat`
 
 ---
 
 ## 🖥️ Example Output
 
-When the app runs successfully, you’ll see:
-
-* ✅ A sidebar with mode selection and configuration info
-* 🧠 Interactive visualizations showing classification distributions
-* 🗞️ Claim cards like:
+* Interactive classification charts
+* Summarized claim statistics
+* Transparent, citation-backed reasoning
 
 ```
 ✅ TRUE CLAIM
-Claim: "Harshad Mehta was trapped by bureaucrats, politicians, and journalists."
-Reason: Supported by multiple Reddit posts confirming this narrative.
+Claim: "Harshad Mehta was trapped by bureaucrats and journalists."
+Reason: Supported by multiple Reddit posts verifying this narrative.
 Source URL: https://www.reddit.com/r/indianews/comments/def456/
 ```
 
 ---
 
-## ✅ You’re Ready to Go!
-
-The app is now live at **[http://localhost:8501](http://localhost:8501)** 🎉
-You can start analyzing claims, viewing their truth classifications, and exploring how the local LLM interprets context from real-world Reddit discussions.
-
-> 🧭 For mock data preview, switch to **Test Mode** in the sidebar — no Reddit API or LLM setup needed.
-
 ## 📁 Project Structure
 
-| File                        | Description                                                       |
-| --------------------------- | ----------------------------------------------------------------- |
-| `final5.py`                 | 🎨 Streamlit App — main UI and orchestration logic.               |
-| `final.py`                  | 🧠 Analysis Core — handles chunking, batching, and LLM reasoning. |
-| `reddit.py`                 | 🔎 Reddit Scraper — manages API integration and query search.     |                           |
-| `requirements.txt`          | 📦 Project dependencies.                                          |
-| `reddit_search_output.json` | 💾 Output of scraped Reddit data.                                 |
-| `README.md`                 | 📘 Documentation file.                                            |
+| File                        | Description                                                     |
+| --------------------------- | --------------------------------------------------------------- |
+| `final5.py`                 | 🎨 Streamlit App — updated UI and orchestration logic.          |
+| `final.py`                  | 🧠 Analysis Core — chunking, batching, and LLM-based reasoning. |
+| `reddit.py`                 | 🔎 Reddit Scraper — PRAW integration and search management.     |                 |
+| `requirements.txt`          | 📦 Project dependencies.                                        |
+| `reddit_search_output.json` | 💾 Raw scraped Reddit data.                                     |
+| `README.md`                 | 📘 Documentation file.                                          |
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome!
-If you’d like to improve the LLM prompt, enhance multilingual support, or refine the visualization layer, please open a pull request.
+We welcome contributions!
+Improve multilingual support, optimize prompts, or enhance visualization — just submit a PR.
 
 ---
 
@@ -205,7 +198,7 @@ Licensed under the **MIT License** — see [LICENSE](./LICENSE) for details.
 
 ### 💡 Summary
 
-FND-AI demonstrates how **local LLMs + open-source frameworks** can power transparent and multilingual **fake news detection** systems.
-It’s built to show how **agentic AI reasoning** can operate locally, verifying claims directly from public discussions — without relying on external APIs.
+**Bharat AI** is a next-generation misinformation detection framework combining local LLMs and transparent reasoning.
+It offers multilingual verification, context awareness, and a user-friendly interface for real-time fact-checking across India.
 
-> **Developed with ❤️ by Team Bharat | FND-AI**
+> **Developed with ❤️ by Team Bharat | Agentic AI - Misinformation Track**
